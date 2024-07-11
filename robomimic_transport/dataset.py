@@ -19,8 +19,12 @@ class RobomimicImageDataset(torch.utils.data.Dataset):
         # Permute image dimensions from (N, H, W, C) to (N, C, H, W)
         # Resize images to 128x128
         # Normalize images to [0, 1]
-        images = np.array([np.array(Image.fromarray(img).resize((128, 128))) for img in images])
+        images = np.array([np.array(Image.fromarray(img).resize((128, 128))) for img in images], dtype=np.float32)
         images = images / 255.0
+        images = np.transpose(images, (0, 3, 1, 2))
+
+        agent_pos = agent_pos.astype(np.float32)
+        action = action.astype(np.float32)
 
         # NOT APPLICABLE FOR ROBOMIMIC
         # for view, image_list in images.items():
@@ -146,3 +150,15 @@ if __name__ == '__main__':
     print(f'Number of agent positions: {len(dataset.train_data["agent_pos"])}')
     print(f'Number of actions: {len(dataset.train_data["action"])}')
     print(f'Indices: {dataset.indices}')
+
+    from torch.utils.data import DataLoader
+    dataloader = DataLoader(dataset, batch_size=2, num_workers=2, shuffle=True, pin_memory=True, persistent_workers=True)
+    print("Dataset loaded successfully")
+
+    # Output
+    batch = next(iter(dataloader))
+    print(f'Batch size: {len(batch)}')
+    print(f'Batch keys: {batch.keys()}')
+    print(f'Batch image_front shape: {batch["image_front"].shape}')
+    print(f'Batch agent_pos shape: {batch["agent_pos"].shape}')
+    print(f'Batch action shape: {batch["action"].shape}')

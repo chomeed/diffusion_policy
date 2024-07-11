@@ -56,9 +56,9 @@ def parse_data_robomimic(dataset_dir):
     agent_pos = np.concatenate(agent_pos, axis=0)
     episode_ends = np.cumsum(episode_ends)  
     print(len(episode_ends), "episodes successfully loaded.")
-
+    
     return images, agent_pos, action, episode_ends
 
-if __name__ == "__main__":
-    task_data_dir = '/Users/meeroro/workspace/bimanual_imitation/diffusion_policy/robomimic_transport/data/transport/ph/image_dataset.hdf5'
-    parse_data_robomimic(task_data_dir)
+# if __name__ == "__main__":
+#     task_data_dir = '/Users/meeroro/workspace/bimanual_imitation/diffusion_policy/robomimic_transport/data/transport/ph/image_dataset.hdf5'
+#     parse_data_robomimic(task_data_dir)
